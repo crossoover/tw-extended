@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/tw-extended/static/css/main.07063cc1.css",
+    "main.js": "/tw-extended/static/js/main.3e357926.js",
+    "index.html": "/tw-extended/index.html",
+    "main.07063cc1.css.map": "/tw-extended/static/css/main.07063cc1.css.map",
+    "main.3e357926.js.map": "/tw-extended/static/js/main.3e357926.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.07063cc1.css",
+    "static/js/main.3e357926.js"
+  ]
+}
