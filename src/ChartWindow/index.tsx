@@ -1,16 +1,25 @@
-import React, { SyntheticEvent, useState } from "react";
+import React, { FC, SyntheticEvent, useState } from "react";
 import Draggable from "react-draggable";
 import { ResizeCallbackData } from "react-resizable";
-import { StyledDragIndicatorIcon, StyledResizableBox } from "./styles";
+import {
+  StyledDragIndicatorIcon,
+  StyledResizableBox,
+  Resizer,
+  ResizeWrapper,
+  DisabledState,
+  StyledIframe,
+} from "./styles";
 
 interface IWindowSize {
   width: number;
   height: number;
 }
 
-const defaultGridSize: [number, number] = [30, 30];
+interface IChartWindow {
+  symbol: string;
+}
 
-export const ChartWindow = () => {
+export const ChartWindow: FC<IChartWindow> = ({ symbol }) => {
   const [isInResizingState, setIsInResizingState] = useState<boolean>(false);
   const [isDraggingState, setIsDraggingState] = useState<boolean>(false);
 
@@ -36,26 +45,36 @@ export const ChartWindow = () => {
 
   return (
     <Draggable
-      grid={defaultGridSize}
       onStart={startDragging}
       onStop={stopAllActions}
       disabled={isInResizingState}
       handle={".drg"}
+      grid={[25, 25]}
     >
       <StyledResizableBox
         lockAspectRatio={isDraggingState}
         onResizeStart={startResizing}
         onResizeStop={stopAllActions}
-        handleSize={defaultGridSize}
         minConstraints={[100, 100]}
         width={windowSize.width}
         height={windowSize.height}
         onResize={(event: SyntheticEvent, data: ResizeCallbackData) => {
           setWindowSize({ width: data.size.width, height: data.size.height });
         }}
+        handle={
+          <ResizeWrapper>
+            <Resizer />
+          </ResizeWrapper>
+        }
       >
         <StyledDragIndicatorIcon className="drg" />
-        <iframe src="https://google.com" title="test" />
+        {!isDraggingState && !isInResizingState ? (
+          <StyledIframe
+            src={`https://s.tradingview.com/widgetembed/?frameElementId=tradingview_4e569&symbol=${symbol}&interval=240&range=1M&hidesidetoolbar=0&saveimage=1&toolbarbg=rgba(0, 0, 0, 0.8)&studies=%5B%5D&theme=dark&style=9&timezone=Etc%2FUTC&withdateranges=1&studies_overrides=%7B%7D&overrides=%7B%7D&enabled_features=%5B%5D&disabled_features=%5B%5D&locale=en&utm_source=localhost&utm_medium=widget&utm_campaign=chart&utm_term=${symbol}`}
+          ></StyledIframe>
+        ) : (
+          <DisabledState />
+        )}
       </StyledResizableBox>
     </Draggable>
   );
