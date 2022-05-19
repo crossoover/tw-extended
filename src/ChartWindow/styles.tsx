@@ -3,6 +3,10 @@ import DragIndicatorIcon from "@mui/icons-material/DragIndicator";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { ResizableBox } from "react-resizable";
 
+interface IframeWrapperProps {
+  isHighlighted: boolean;
+}
+
 export const StyledDragIndicatorIcon = styled(DragIndicatorIcon)`
   cursor: move;
   cursor: grab;
@@ -21,6 +25,7 @@ export const StyledDragIndicatorIcon = styled(DragIndicatorIcon)`
 export const StyledResizableBox = styled(ResizableBox)`
   display: flex;
   flex-flow: column nowrap;
+  position: absolute;
 `;
 
 export const Resizer = styled(ArrowForwardIosIcon)`
@@ -52,8 +57,9 @@ export const DisabledState = styled.div`
   box-shadow: 17px 17px 34px #0f121b, -17px -17px 34px #171c29;
 `;
 
-export const StyledIframe = styled.iframe`
+export const StyledIframe = styled.iframe<IframeWrapperProps>`
   width: 100%;
   height: 100%;
   border: none;
+  border: ${(props) => (props.isHighlighted ? "5px solid white" : "none")};
 `;

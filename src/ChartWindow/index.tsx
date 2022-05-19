@@ -9,6 +9,7 @@ import {
   DisabledState,
   StyledIframe,
 } from "./styles";
+import cx from "classnames";
 
 interface IWindowSize {
   width: number;
@@ -17,15 +18,16 @@ interface IWindowSize {
 
 interface IChartWindow {
   symbol: string;
+  isHighlighted: boolean;
 }
 
-export const ChartWindow: FC<IChartWindow> = ({ symbol }) => {
+export const ChartWindow: FC<IChartWindow> = ({ symbol, isHighlighted }) => {
   const [isInResizingState, setIsInResizingState] = useState<boolean>(false);
   const [isDraggingState, setIsDraggingState] = useState<boolean>(false);
 
   const [windowSize, setWindowSize] = useState<IWindowSize>({
-    width: 300,
-    height: 300,
+    width: 400,
+    height: 400,
   });
 
   const startResizing = () => {
@@ -50,12 +52,14 @@ export const ChartWindow: FC<IChartWindow> = ({ symbol }) => {
       disabled={isInResizingState}
       handle={".drg"}
       grid={[25, 25]}
+      bounds="parent"
     >
       <StyledResizableBox
         lockAspectRatio={isDraggingState}
         onResizeStart={startResizing}
         onResizeStop={stopAllActions}
-        minConstraints={[100, 100]}
+        minConstraints={[300, 300]}
+        draggableOpts={{ grid: [25, 25] }}
         width={windowSize.width}
         height={windowSize.height}
         onResize={(event: SyntheticEvent, data: ResizeCallbackData) => {
@@ -70,6 +74,7 @@ export const ChartWindow: FC<IChartWindow> = ({ symbol }) => {
         <StyledDragIndicatorIcon className="drg" />
         {!isDraggingState && !isInResizingState ? (
           <StyledIframe
+            isHighlighted={isHighlighted}
             src={`https://s.tradingview.com/widgetembed/?frameElementId=tradingview_4e569&symbol=${symbol}&interval=240&range=1M&hidesidetoolbar=0&saveimage=1&toolbarbg=rgba(0, 0, 0, 0.8)&studies=%5B%5D&theme=dark&style=9&timezone=Etc%2FUTC&withdateranges=1&studies_overrides=%7B%7D&overrides=%7B%7D&enabled_features=%5B%5D&disabled_features=%5B%5D&locale=en&utm_source=localhost&utm_medium=widget&utm_campaign=chart&utm_term=${symbol}`}
           ></StyledIframe>
         ) : (
